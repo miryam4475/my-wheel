@@ -4,11 +4,23 @@
     <meta charset="UTF-8">
     <title>גלגל המזל - בונוסים</title>
     <style>
-        body { font-family: sans-serif; display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100vh; margin: 0; background: #f4f4f4; }
-        .wheel-container { position: relative; width: 300px; height: 300px; }
-        #wheel { width: 100%; height: 100%; border-radius: 50%; border: 10px solid #333; transition: transform 4s cubic-bezier(0.1, 0, 0.2, 1); background: conic-gradient(#ff6384 0 60deg, #ff9f40 60deg 120deg, #ffcd56 120deg 180deg, #4bc0c0 180deg 240deg, #36a2eb 240deg 300deg, #9966ff 300deg 360deg); }
-        .pointer { position: absolute; top: -20px; left: 50%; transform: translateX(-50%); width: 0; height: 0; border-left: 15px solid transparent; border-right: 15px solid transparent; border-top: 30px solid red; z-index: 10; }
-        button { margin-top: 30px; padding: 15px 30px; font-size: 1.2rem; background: #28a745; color: white; border: none; border-radius: 5px; cursor: pointer; font-weight: bold; }
+        body { font-family: sans-serif; display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100vh; margin: 0; background: #f4f4f4; overflow: hidden; }
+        .wheel-container { position: relative; width: 350px; height: 350px; }
+        #wheel { width: 100%; height: 100%; border-radius: 50%; border: 8px solid #333; transition: transform 4s cubic-bezier(0.1, 0, 0.2, 1); position: relative; overflow: hidden; }
+        .pointer { position: absolute; top: -15px; left: 50%; transform: translateX(-50%); width: 0; height: 0; border-left: 20px solid transparent; border-right: 20px solid transparent; border-top: 40px solid #e74c3c; z-index: 100; }
+        
+        /* עיצוב הפלחים והטקסט */
+        .segment { position: absolute; width: 50%; height: 50%; transform-origin: 100% 100%; display: flex; align-items: center; justify-content: center; color: white; font-weight: bold; font-size: 20px; }
+        .s1 { background: #ff6384; transform: rotate(0deg) skewY(-30deg); }
+        .s2 { background: #ff9f40; transform: rotate(60deg) skewY(-30deg); }
+        .s3 { background: #ffcd56; transform: rotate(120deg) skewY(-30deg); }
+        .s4 { background: #4bc0c0; transform: rotate(180deg) skewY(-30deg); }
+        .s5 { background: #36a2eb; transform: rotate(240deg) skewY(-30deg); }
+        .s6 { background: #9966ff; transform: rotate(300deg) skewY(-30deg); }
+
+        .text { position: absolute; transform: skewY(30deg) rotate(15deg); right: 20px; bottom: 40px; text-shadow: 1px 1px 2px rgba(0,0,0,0.5); }
+        
+        button { margin-top: 40px; padding: 15px 40px; font-size: 1.4rem; background: #28a745; color: white; border: none; border-radius: 50px; cursor: pointer; box-shadow: 0 4px 15px rgba(0,0,0,0.2); }
         button:disabled { background: #ccc; }
     </style>
 </head>
@@ -16,7 +28,14 @@
 
     <div class="wheel-container">
         <div class="pointer"></div>
-        <div id="wheel"></div>
+        <div id="wheel">
+            <div class="segment s1"><span class="text">₪10</span></div>
+            <div class="segment s2"><span class="text">₪50</span></div>
+            <div class="segment s3"><span class="text">₪20</span></div>
+            <div class="segment s4"><span class="text">₪100</span></div>
+            <div class="segment s5"><span class="text">₪5</span></div>
+            <div class="segment s6"><span class="text">₪30</span></div>
+        </div>
     </div>
 
     <button id="spinBtn" onclick="spinWheel()">סובבי וקבלי בונוס!</button>
@@ -27,14 +46,13 @@
             const btn = document.getElementById('spinBtn');
             btn.disabled = true;
             
-            // הגרלת סיבוב (לפחות 5 סיבובים מלאים + זווית אקראית)
-            const randomDeg = Math.floor(Math.random() * 360) + 1800;
+            const randomDeg = Math.floor(Math.random() * 360) + 1800; 
             wheel.style.transform = `rotate(${randomDeg}deg)`;
             
             setTimeout(() => {
-                alert("כל הכבוד! צלמי את המסך ושלחי למנהלת!");
+                alert("מזל טוב! צלמי את המסך למנהלת.");
                 btn.disabled = false;
-            }, 4100);
+            }, 4200);
         }
     </script>
 </body>
