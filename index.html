@@ -2,13 +2,12 @@
 <html lang="he" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <title>גלגל המזל - כיול אוריגמי</title>
+    <title>גלגל המזל - גרסת זיקוקים בלבד</title>
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
     <style>
         body { font-family: sans-serif; display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100vh; margin: 0; background: transparent; overflow: hidden; }
-        .wheel-container { position: relative; width: 300px; height: 300px; }
-        /* הגדלת החץ והדגשתו */
-        .pointer { position: absolute; top: -25px; left: 50%; transform: translateX(-50%); width: 0; height: 0; border-left: 20px solid transparent; border-right: 20px solid transparent; border-top: 40px solid #ff0000; z-index: 100; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.5)); }
+        .wheel-container { position: relative; width: 320px; height: 320px; }
+        .pointer { position: absolute; top: -20px; left: 50%; transform: translateX(-50%); width: 0; height: 0; border-left: 18px solid transparent; border-right: 18px solid transparent; border-top: 35px solid #ff0000; z-index: 10; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3)); }
         #wheel { 
             width: 100%; height: 100%; border-radius: 50%; border: 8px solid #333; 
             position: relative; transition: transform 4s cubic-bezier(0.1, 0, 0.1, 1);
@@ -16,16 +15,13 @@
                 #ff6384 0deg 60deg, #36a2eb 60deg 120deg, #ffcd56 120deg 180deg, 
                 #4bc0c0 180deg 240deg, #9966ff 240deg 300deg, #ff9f40 300deg 360deg
             );
-            box-shadow: 0 10px 30px rgba(0,0,0,0.4);
         }
-        .label { position: absolute; width: 100%; height: 100%; text-align: center; color: white; font-weight: bold; font-size: 20px; pointer-events: none; }
-        /* מיקום מדויק של התוויות */
+        .label { position: absolute; width: 100%; height: 100%; text-align: center; color: white; font-weight: bold; font-size: 24px; pointer-events: none; }
         .l1 { transform: rotate(30deg); } .l2 { transform: rotate(90deg); }
         .l3 { transform: rotate(150deg); } .l4 { transform: rotate(210deg); }
         .l5 { transform: rotate(270deg); } .l6 { transform: rotate(330deg); }
-        .label span { display: block; padding-top: 25px; text-shadow: 2px 2px 4px rgba(0,0,0,0.6); }
-        #resultDisplay { margin-top: 15px; height: 35px; font-size: 26px; font-weight: bold; color: #2c3e50; text-align: center; }
-        button { margin-top: 10px; padding: 12px 45px; font-size: 1.4rem; background: #27ae60; color: white; border: none; border-radius: 50px; cursor: pointer; box-shadow: 0 4px #1e8449; font-weight: bold; }
+        .label span { display: block; padding-top: 25px; text-shadow: 2px 2px 4px rgba(0,0,0,0.5); }
+        button { margin-top: 40px; padding: 15px 50px; font-size: 1.5rem; background: #27ae60; color: white; border: none; border-radius: 50px; cursor: pointer; font-weight: bold; box-shadow: 0 4px #1e8449; }
         button:disabled { background: #bdc3c7; box-shadow: none; }
     </style>
 </head>
@@ -34,11 +30,5 @@
         <div class="pointer"></div>
         <div id="wheel">
             <div class="label l1"><span>₪10</span></div>
-            <div class="label l2"><span>₪30</span></div>
-            <div class="label l3"><span>₪5</span></div>
-            <div class="label l4"><span>₪100</span></div>
-            <div class="label l5"><span>₪50</span></div>
-            <div class="label l6"><span>₪20</span></div>
-        </div>
-    </div>
-    <div id="resultDisplay"></div>
+            <div class="label l2"><span>₪20</span></div>
+            <div class="label l3"><span>₪50</span></div>
