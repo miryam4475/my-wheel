@@ -2,93 +2,78 @@
 <html lang="he" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <title>גלגל המזל - זיקוקים</title>
+    <title>גלגל המזל - דיוק מקסימלי</title>
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
     <style>
         body { font-family: sans-serif; display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100vh; margin: 0; background: transparent; overflow: hidden; }
-        
         .wheel-container { position: relative; width: 320px; height: 320px; }
-        
         .pointer { position: absolute; top: -20px; left: 50%; transform: translateX(-50%); width: 0; height: 0; border-left: 18px solid transparent; border-right: 18px solid transparent; border-top: 35px solid #e74c3c; z-index: 10; }
-
         #wheel { 
             width: 100%; height: 100%; border-radius: 50%; border: 6px solid #333; 
-            position: relative; 
-            transition: transform 4s cubic-bezier(0.1, 0, 0.1, 1);
+            position: relative; transition: transform 4s cubic-bezier(0.1, 0, 0.1, 1);
             background: conic-gradient(
-                #ff6384 0deg 60deg, 
-                #36a2eb 60deg 120deg, 
-                #ffcd56 120deg 180deg, 
-                #4bc0c0 180deg 240deg, 
-                #9966ff 240deg 300deg, 
-                #ff9f40 300deg 360deg
+                #ff6384 0deg 60deg, #36a2eb 60deg 120deg, #ffcd56 120deg 180deg, 
+                #4bc0c0 180deg 240deg, #9966ff 240deg 300deg, #ff9f40 300deg 360deg
             );
         }
-
         .label { position: absolute; width: 100%; height: 100%; text-align: center; color: white; font-weight: bold; font-size: 22px; pointer-events: none; }
         .l1 { transform: rotate(30deg); } .l2 { transform: rotate(90deg); }
         .l3 { transform: rotate(150deg); } .l4 { transform: rotate(210deg); }
         .l5 { transform: rotate(270deg); } .l6 { transform: rotate(330deg); }
         .label span { display: block; padding-top: 25px; text-shadow: 1px 1px 2px rgba(0,0,0,0.5); }
-
-        #resultDisplay { margin-top: 20px; height: 40px; font-size: 28px; font-weight: bold; color: #2c3e50; text-align: center; }
-
-        button { margin-top: 10px; padding: 12px 40px; font-size: 1.3rem; background: #27ae60; color: white; border: none; border-radius: 50px; cursor: pointer; font-weight: bold; box-shadow: 0 4px #1e8449; }
-        button:active { transform: translateY(2px); box-shadow: 0 2px #1e8449; }
+        #resultDisplay { margin-top: 20px; height: 40px; font-size: 28px; font-weight: bold; color: #2c3e50; }
+        button { margin-top: 10px; padding: 12px 40px; font-size: 1.3rem; background: #27ae60; color: white; border: none; border-radius: 50px; cursor: pointer; box-shadow: 0 4px #1e8449; }
         button:disabled { background: #ccc; box-shadow: none; }
     </style>
 </head>
 <body>
-
     <div class="wheel-container">
         <div class="pointer"></div>
         <div id="wheel">
             <div class="label l1"><span>₪10</span></div>
-            <div class="label l2"><span>₪20</span></div>
-            <div class="label l3"><span>₪50</span></div>
+            <div class="label l2"><span>₪30</span></div>
+            <div class="label l3"><span>₪5</span></div>
             <div class="label l4"><span>₪100</span></div>
-            <div class="label l5"><span>₪5</span></div>
-            <div class="label l6"><span>₪30</span></div>
+            <div class="label l5"><span>₪50</span></div>
+            <div class="label l6"><span>₪20</span></div>
         </div>
     </div>
-
     <div id="resultDisplay"></div>
     <button id="spinBtn" onclick="spinWheel()">סובבי!</button>
 
     <script>
         let currentRotation = 0;
-        const prizes = ["₪10", "₪30", "₪5", "₪100", "₪50", "₪20"]; // הסדר הפוך בגלל כיוון השעון
+        // רשימת הסכומים לפי סדר הפלחים ב-conic-gradient (עם כיוון השעון)
+        const prizes = [
+            { label: "₪10", angle: 330 },
+            { label: "₪30", angle: 270 },
+            { label: "₪5", angle: 210 },
+            { label: "₪100", angle: 150 },
+            { label: "₪50", angle: 90 },
+            { label: "₪20", angle: 30 }
+        ];
 
         function spinWheel() {
             const wheel = document.getElementById('wheel');
             const btn = document.getElementById('spinBtn');
             const display = document.getElementById('resultDisplay');
-            
             btn.disabled = true;
-            display.innerText = "מסתובב...";
-            
-            const randomExtra = Math.floor(Math.random() * 360);
-            const extraDegrees = randomExtra + 2160; 
-            currentRotation += extraDegrees;
-            
+            display.innerText = "בהצלחה...";
+
+            // 1. הגרלת פרס מתוך הרשימה
+            const randomIndex = Math.floor(Math.random() * prizes.length);
+            const selected = prizes[randomIndex];
+
+            // 2. חישוב זווית: סיבובים מלאים + הזווית הספציפית של הפרס
+            // אנחנו מוסיפים 3600 מעלות (10 סיבובים) כדי שיהיה מהיר
+            const targetRotation = 3600 + selected.angle;
+            currentRotation += targetRotation - (currentRotation % 360) + 3600;
+
             wheel.style.transform = `rotate(${currentRotation}deg)`;
-            
+
             setTimeout(() => {
-                // חישוב איזה פלח נבחר (לפי הזווית הסופית)
-                const actualDeg = currentRotation % 360;
-                const prizeIndex = Math.floor(((360 - actualDeg) % 360) / 60);
-                const winningPrize = prizes[prizeIndex];
-
-                // תצוגת תוצאה
-                display.innerText = "זכית ב-" + winningPrize + "!";
-                
-                // אפקט זיקוקים
-                confetti({
-                    particleCount: 150,
-                    spread: 70,
-                    origin: { y: 0.6 }
-                });
-
+                display.innerText = "זכית ב-" + selected.label + "!";
+                confetti({ particleCount: 150, spread: 70, origin: { y: 0.6 } });
                 btn.disabled = false;
             }, 4000);
         }
