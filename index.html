@@ -2,35 +2,46 @@
 <html lang="he" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>גלגל המזל</title>
+    <title>גלגל המזל - מדויק</title>
     <style>
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100vh; margin: 0; background: #f0f2f5; overflow: hidden; }
-        .wheel-container { position: relative; width: 320px; height: 320px; display: flex; align-items: center; justify-content: center; }
+        body { font-family: sans-serif; display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100vh; margin: 0; background: #f4f4f4; }
         
-        /* החץ העליון */
-        .pointer { position: absolute; top: -20px; left: 50%; transform: translateX(-50%); width: 0; height: 0; border-left: 15px solid transparent; border-right: 15px solid transparent; border-top: 30px solid #e74c3c; z-index: 10; filter: drop-shadow(0 2px 2px rgba(0,0,0,0.2)); }
+        .wheel-container { position: relative; width: 350px; height: 350px; }
         
-        /* הגלגל עצמו */
-        #wheel { width: 100%; height: 100%; border-radius: 50%; border: 10px solid #333; position: relative; transition: transform 4s cubic-bezier(0.1, 0, 0.2, 1); background: #333; overflow: hidden; box-shadow: 0 10px 25px rgba(0,0,0,0.2); }
-        
-        /* הפלחים */
-        .segment { position: absolute; width: 100%; height: 100%; clip-path: polygon(50% 50%, 50% 0, 100% 0, 100% 50%); transform-origin: 50% 50%; display: flex; align-items: center; justify-content: center; }
-        
-        .s1 { background: #ff6384; transform: rotate(0deg); }
-        .s2 { background: #36a2eb; transform: rotate(60deg); }
-        .s3 { background: #ffcd56; transform: rotate(120deg); }
-        .s4 { background: #4bc0c0; transform: rotate(180deg); }
-        .s5 { background: #9966ff; transform: rotate(240deg); }
-        .s6 { background: #ff9f40; transform: rotate(300deg); }
+        /* החץ המצביע */
+        .pointer { position: absolute; top: -25px; left: 50%; transform: translateX(-50%); width: 0; height: 0; border-left: 20px solid transparent; border-right: 20px solid transparent; border-top: 40px solid red; z-index: 10; }
 
-        /* הטקסט בתוך הפלחים */
-        .text { position: absolute; top: 20%; left: 65%; transform: rotate(30deg); color: white; font-weight: bold; font-size: 24px; text-shadow: 1px 1px 3px rgba(0,0,0,0.4); }
+        /* הגלגל */
+        #wheel { 
+            width: 100%; height: 100%; border-radius: 50%; border: 8px solid #333; 
+            position: relative; transition: transform 4s cubic-bezier(0.1, 0, 0.2, 1);
+            background: conic-gradient(
+                #ff6384 0deg 60deg, 
+                #36a2eb 60deg 120deg, 
+                #ffcd56 120deg 180deg, 
+                #4bc0c0 180deg 240deg, 
+                #9966ff 240deg 300deg, 
+                #ff9f40 300deg 360deg
+            );
+            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+        }
+
+        /* מיקום הטקסט על הפלחים */
+        .label { position: absolute; width: 100%; height: 100%; text-align: center; color: white; font-weight: bold; font-size: 22px; pointer-events: none; }
         
-        /* כפתור הסיבוב */
-        button { margin-top: 40px; padding: 15px 50px; font-size: 1.5rem; background: #2ecc71; color: white; border: none; border-radius: 50px; cursor: pointer; font-weight: bold; box-shadow: 0 4px 0 #27ae60; transition: all 0.2s; }
-        button:active { transform: translateY(2px); box-shadow: 0 2px 0 #27ae60; }
-        button:disabled { background: #bdc3c7; box-shadow: 0 4px 0 #95a5a6; cursor: not-allowed; }
+        /* כל תווית מסובבת למרכז הפלח שלה */
+        .l1 { transform: rotate(30deg); }  /* מרכז הפלח הראשון */
+        .l2 { transform: rotate(90deg); }  /* מרכז הפלח השני */
+        .l3 { transform: rotate(150deg); }
+        .l4 { transform: rotate(210deg); }
+        .l5 { transform: rotate(270deg); }
+        .l6 { transform: rotate(330deg); }
+
+        .label span { display: block; padding-top: 25px; text-shadow: 1px 1px 3px rgba(0,0,0,0.5); }
+
+        button { margin-top: 40px; padding: 15px 40px; font-size: 1.3rem; background: #28a745; color: white; border: none; border-radius: 50px; cursor: pointer; box-shadow: 0 4px #1e7e34; }
+        button:active { transform: translateY(2px); box-shadow: 0 2px #1e7e34; }
+        button:disabled { background: #ccc; box-shadow: none; cursor: not-allowed; }
     </style>
 </head>
 <body>
@@ -38,12 +49,12 @@
     <div class="wheel-container">
         <div class="pointer"></div>
         <div id="wheel">
-            <div class="segment s1"><span class="text">₪10</span></div>
-            <div class="segment s2"><span class="text">₪20</span></div>
-            <div class="segment s3"><span class="text">₪50</span></div>
-            <div class="segment s4"><span class="text">₪100</span></div>
-            <div class="segment s5"><span class="text">₪5</span></div>
-            <div class="segment s6"><span class="text">₪30</span></div>
+            <div class="label l1"><span>₪10</span></div>
+            <div class="label l2"><span>₪20</span></div>
+            <div class="label l3"><span>₪50</span></div>
+            <div class="label l4"><span>₪100</span></div>
+            <div class="label l5"><span>₪5</span></div>
+            <div class="label l6"><span>₪30</span></div>
         </div>
     </div>
 
@@ -55,12 +66,12 @@
             const btn = document.getElementById('spinBtn');
             btn.disabled = true;
             
-            // הגרלת סיבוב משמעותי
-            const randomDeg = Math.floor(Math.random() * 360) + 1800; 
+            // סיבוב אקראי חזק
+            const randomDeg = Math.floor(Math.random() * 360) + 2160; 
             wheel.style.transform = `rotate(${randomDeg}deg)`;
             
             setTimeout(() => {
-                alert("מזל טוב! צלמי למנהלת את המסך.");
+                alert("מזל טוב! צלמי את המסך למנהלת.");
                 btn.disabled = false;
             }, 4200);
         }
