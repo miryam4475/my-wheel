@@ -2,20 +2,21 @@
 <html lang="he" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <title>גלגל המזל - גרסה מהירה</title>
+    <title>גלגל המזל - גרסה לאוריגמי</title>
     <style>
-        body { font-family: sans-serif; display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100vh; margin: 0; background: #f4f4f4; overflow: hidden; }
+        body { font-family: sans-serif; display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100vh; margin: 0; background: transparent; overflow: hidden; }
         
-        .wheel-container { position: relative; width: 350px; height: 350px; perspective: 1000px; }
+        .wheel-container { position: relative; width: 320px; height: 320px; }
         
-        .pointer { position: absolute; top: -25px; left: 50%; transform: translateX(-50%); width: 0; height: 0; border-left: 20px solid transparent; border-right: 20px solid transparent; border-top: 40px solid #e74c3c; z-index: 10; filter: drop-shadow(0 2px 2px rgba(0,0,0,0.2)); }
+        .pointer { position: absolute; top: -20px; left: 50%; transform: translateX(-50%); width: 0; height: 0; border-left: 18px solid transparent; border-right: 18px solid transparent; border-top: 35px solid #e74c3c; z-index: 10; }
 
         #wheel { 
-            width: 100%; height: 100%; border-radius: 50%; border: 8px solid #333; 
+            width: 100%; height: 100%; border-radius: 50%; border: 6px solid #333; 
             position: relative; 
-            /* האנימציה כאן הופכת למהירה וחלקה יותר */
-            transition: transform 5s cubic-bezier(0.1, 0, 0.1, 1);
-            will-change: transform; /* מודיע לדפדפן להתכונן לסיבוב מהיר */
+            /* שינוי האנימציה לליניארית יותר כדי למנוע קפיצות באוריגמי */
+            transition: transform 4s ease-out; 
+            backface-visibility: hidden;
+            -webkit-backface-visibility: hidden;
             background: conic-gradient(
                 #ff6384 0deg 60deg, 
                 #36a2eb 60deg 120deg, 
@@ -24,20 +25,16 @@
                 #9966ff 240deg 300deg, 
                 #ff9f40 300deg 360deg
             );
-            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
         }
 
-        .label { position: absolute; width: 100%; height: 100%; text-align: center; color: white; font-weight: bold; font-size: 24px; pointer-events: none; }
-        
+        .label { position: absolute; width: 100%; height: 100%; text-align: center; color: white; font-weight: bold; font-size: 22px; pointer-events: none; }
         .l1 { transform: rotate(30deg); } .l2 { transform: rotate(90deg); }
         .l3 { transform: rotate(150deg); } .l4 { transform: rotate(210deg); }
         .l5 { transform: rotate(270deg); } .l6 { transform: rotate(330deg); }
+        .label span { display: block; padding-top: 25px; text-shadow: 1px 1px 2px rgba(0,0,0,0.5); }
 
-        .label span { display: block; padding-top: 30px; text-shadow: 2px 2px 4px rgba(0,0,0,0.5); }
-
-        button { margin-top: 50px; padding: 15px 50px; font-size: 1.5rem; background: #27ae60; color: white; border: none; border-radius: 50px; cursor: pointer; box-shadow: 0 5px 0 #1e8449; transition: all 0.1s; }
-        button:active { transform: translateY(3px); box-shadow: 0 2px 0 #1e8449; }
-        button:disabled { background: #bdc3c7; box-shadow: none; cursor: not-allowed; }
+        button { margin-top: 30px; padding: 12px 40px; font-size: 1.3rem; background: #27ae60; color: white; border: none; border-radius: 50px; cursor: pointer; font-weight: bold; }
+        button:disabled { background: #ccc; }
     </style>
 </head>
 <body>
@@ -54,7 +51,7 @@
         </div>
     </div>
 
-    <button id="spinBtn" onclick="spinWheel()">סובבי וקבלי בונוס!</button>
+    <button id="spinBtn" onclick="spinWheel()">סובבי!</button>
 
     <script>
         let currentRotation = 0;
@@ -64,12 +61,17 @@
             const btn = document.getElementById('spinBtn');
             btn.disabled = true;
             
-            // הוספת סיבובים משמעותיים (8-10 סיבובים מלאים) למהירות גבוהה
-            const extraDegrees = Math.floor(Math.random() * 360) + 3600; 
+            // הגרלת סיבוב קצר יותר (4-6 סיבובים) כדי שהדפדפן לא יתייאש באמצע
+            const extraDegrees = Math.floor(Math.random() * 360) + 1800; 
             currentRotation += extraDegrees;
             
             wheel.style.transform = `rotate(${currentRotation}deg)`;
             
+            // זמן ההמתנה חייב להיות זהה לזמן ה-transition (כאן 4 שניות)
+            setTimeout(() => {
+                alert("מזל טוב!");
+                btn.disabled = false;
+            }, 4000);
         }
     </script>
 </body>
