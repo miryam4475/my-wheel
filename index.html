@@ -2,7 +2,8 @@
 <html lang="he" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <title>גלגל המזל - גרסה לאוריגמי</title>
+    <title>גלגל המזל - זיקוקים</title>
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
     <style>
         body { font-family: sans-serif; display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100vh; margin: 0; background: transparent; overflow: hidden; }
         
@@ -13,10 +14,7 @@
         #wheel { 
             width: 100%; height: 100%; border-radius: 50%; border: 6px solid #333; 
             position: relative; 
-            /* שינוי האנימציה לליניארית יותר כדי למנוע קפיצות באוריגמי */
-            transition: transform 4s ease-out; 
-            backface-visibility: hidden;
-            -webkit-backface-visibility: hidden;
+            transition: transform 4s cubic-bezier(0.1, 0, 0.1, 1);
             background: conic-gradient(
                 #ff6384 0deg 60deg, 
                 #36a2eb 60deg 120deg, 
@@ -33,8 +31,11 @@
         .l5 { transform: rotate(270deg); } .l6 { transform: rotate(330deg); }
         .label span { display: block; padding-top: 25px; text-shadow: 1px 1px 2px rgba(0,0,0,0.5); }
 
-        button { margin-top: 30px; padding: 12px 40px; font-size: 1.3rem; background: #27ae60; color: white; border: none; border-radius: 50px; cursor: pointer; font-weight: bold; }
-        button:disabled { background: #ccc; }
+        #resultDisplay { margin-top: 20px; height: 40px; font-size: 28px; font-weight: bold; color: #2c3e50; text-align: center; }
+
+        button { margin-top: 10px; padding: 12px 40px; font-size: 1.3rem; background: #27ae60; color: white; border: none; border-radius: 50px; cursor: pointer; font-weight: bold; box-shadow: 0 4px #1e8449; }
+        button:active { transform: translateY(2px); box-shadow: 0 2px #1e8449; }
+        button:disabled { background: #ccc; box-shadow: none; }
     </style>
 </head>
 <body>
@@ -51,25 +52,43 @@
         </div>
     </div>
 
+    <div id="resultDisplay"></div>
     <button id="spinBtn" onclick="spinWheel()">סובבי!</button>
 
     <script>
         let currentRotation = 0;
+        const prizes = ["₪10", "₪30", "₪5", "₪100", "₪50", "₪20"]; // הסדר הפוך בגלל כיוון השעון
 
         function spinWheel() {
             const wheel = document.getElementById('wheel');
             const btn = document.getElementById('spinBtn');
-            btn.disabled = true;
+            const display = document.getElementById('resultDisplay');
             
-            // הגרלת סיבוב קצר יותר (4-6 סיבובים) כדי שהדפדפן לא יתייאש באמצע
-            const extraDegrees = Math.floor(Math.random() * 360) + 1800; 
+            btn.disabled = true;
+            display.innerText = "מסתובב...";
+            
+            const randomExtra = Math.floor(Math.random() * 360);
+            const extraDegrees = randomExtra + 2160; 
             currentRotation += extraDegrees;
             
             wheel.style.transform = `rotate(${currentRotation}deg)`;
             
-            // זמן ההמתנה חייב להיות זהה לזמן ה-transition (כאן 4 שניות)
             setTimeout(() => {
-                alert("מזל טוב!");
+                // חישוב איזה פלח נבחר (לפי הזווית הסופית)
+                const actualDeg = currentRotation % 360;
+                const prizeIndex = Math.floor(((360 - actualDeg) % 360) / 60);
+                const winningPrize = prizes[prizeIndex];
+
+                // תצוגת תוצאה
+                display.innerText = "זכית ב-" + winningPrize + "!";
+                
+                // אפקט זיקוקים
+                confetti({
+                    particleCount: 150,
+                    spread: 70,
+                    origin: { y: 0.6 }
+                });
+
                 btn.disabled = false;
             }, 4000);
         }
